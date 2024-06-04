@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.newproject.user.UserMapper">
+
+    <insert id="signUp" useGeneratedKeys="true" keyProperty="iuser">
+        insert into t_user
+        set
+        email = #{email}
+        , password = #{password}
+        , nickname = #{nickname}
+        , gander = #{gander}
+        , telNumber = #{telNumber}
+        , address = #{address}
+        , birth = #{birth}
+    </insert>
+
+    <update id="signPicUpd">
+        update t_user
+        set pic = #{pic}
+        where iuser = #{iuser}
+    </update>
+
+    <select id="emailCheck">
+        select email
+        from t_user
+        where email = #{email}
+    </select>
+
+    <select id="telCheck">
+        select telNumber
+        from t_user
+        where telNumber = #{telNumber}
+    </select>
+
+    <select id="userEntity">
+        select iuser, email, password, nickname, gander, pic, telNumber, address, birth, created_at as createdAt
+        from t_user
+        where email = #{email}
+    </select>
+
+</mapper>
