@@ -7,7 +7,7 @@ import java.util.List;
 
 @Data
 @Builder
-public class CommunityInsVo {
+public class CommunityInsPicVo {
     private int iboard;
     private List<String> pics;
 }

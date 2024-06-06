@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.newproject.community.CommunityMapper">
+
+    <!-- ...............커뮤니티 등록............. -->
+
     <insert id="communityIns" useGeneratedKeys="true" keyProperty="iboard">
         insert into t_community
         set iuser = #{iuser}
@@ -8,6 +11,7 @@
         , content = #{content}
     </insert>
 
+    <!-- 커뮤니티 등록, 수정 사용 -->
     <insert id="communityInsPic">
         insert into t_community_pic
         (iboard, pic)
@@ -17,6 +21,17 @@
         </foreach>
     </insert>
 
+    <!--          ......................         -->
+
+
+    <!-- ...............커뮤니티 수정.............. -->
+
+    <select id="communitySelBoard">
+        SELECT ipic, pic
+        FROM t_community_pic
+        WHERE iboard = #{iboard}
+    </select>
+
     <update id="communityUpd">
         update t_community
         set title = #{title}
@@ -24,4 +39,34 @@
         where iuser = #{iuser}
         and iboard = #{iboard}
     </update>
+
+    <select id="communitySelPic">
+        select ipic, pic
+        from t_community_pic
+        where ipic in (
+        <foreach collection="ipic" item="ipic" separator=", ">
+            #{ipic}
+        </foreach>
+        )
+    </select>
+
+    <delete id="communityDelPic">
+        delete from t_community_pic
+        where ipic in (
+        <foreach collection="ipic" item="ipic" separator=", ">
+            #{ipic}
+        </foreach>
+        )
+    </delete>
+
+    <!--          ......................         -->
+
+
+
+    <delete id="communityDel">
+        delete from t_community
+        where iuser = #{iuser}
+        and iboard = #{iboard}
+    </delete>
+
 </mapper>

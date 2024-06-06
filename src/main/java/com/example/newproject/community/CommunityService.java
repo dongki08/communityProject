@@ -1,14 +1,17 @@
 package com.example.newproject.community;
 
 import com.example.newproject.common.MyFileUtils;
-import com.example.newproject.common.ResVo;
 import com.example.newproject.community.model.CommunityInsDto;
-import com.example.newproject.community.model.CommunityInsVo;
+import com.example.newproject.community.model.CommunityInsPicVo;
+import com.example.newproject.community.model.CommunitySelPicVo;
+import com.example.newproject.community.model.CommunityUpdDto;
 import com.example.newproject.security.AuthenticationFacade;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -19,7 +22,7 @@ public class CommunityService {
 
 
     @Transactional
-    public CommunityInsVo communityIns(CommunityInsDto dto) {
+    public CommunityInsPicVo communityIns(CommunityInsDto dto) {
         dto.setIuser(authenticationFacade.getLoginUserPk());
 
         mapper.communityIns(dto);
@@ -32,12 +35,45 @@ public class CommunityService {
             }
             mapper.communityInsPic(dto);
         }
-        CommunityInsVo vo = CommunityInsVo.builder()
+        CommunityInsPicVo vo = CommunityInsPicVo.builder()
                 .iboard(dto.getIboard())
                 .pics(dto.getPics())
                 .build();
 
         return vo;
+    }
+
+    @Transactional
+    public CommunityInsPicVo communityUpd(CommunityUpdDto dto) {
+        //List<CommunitySelPicVo> bDto = mapper.communitySelBoard(dto.getIboard());
+
+        dto.setIuser(authenticationFacade.getLoginUserPk());
+
+        mapper.communityUpd(dto);
+
+        String target = "/community/" + dto.getIboard();
+        if(dto.getIpic() != null && !dto.getIpic().isEmpty()) {
+            List<CommunitySelPicVo> ipic = mapper.communitySelPic(dto.getIpic());
+            for (CommunitySelPicVo ipics : ipic) {
+                myFileUtils.delFolderTrigger2(target + "/" + ipics.getPic());
+            }
+            mapper.communityDelPic(dto.getIpic());
+        }
+        if(dto.getFiles() != null) {
+
+            for (MultipartFile file : dto.getFiles()) {
+                String saveFileNm = myFileUtils.transferTo(file, target);
+                dto.getPics().add(saveFileNm);
+            }
+            mapper.communityInsPic(dto);
+        }
+        CommunityInsPicVo vo = CommunityInsPicVo.builder()
+                .iboard(dto.getIboard())
+                .pics(dto.getPics())
+                .build();
+
+        return vo;
+
     }
 
 }
