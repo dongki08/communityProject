@@ -2,7 +2,7 @@ package com.example.newproject.user;
 
 import com.example.newproject.common.*;
 import com.example.newproject.exception.RestApiException;
-import com.example.newproject.exception.UserErrorCode;
+import com.example.newproject.exception.AllErrorCode;
 import com.example.newproject.security.JwtTokenProvider;
 import com.example.newproject.security.MyPrincipal;
 import com.example.newproject.user.model.UserEntity;
@@ -34,11 +34,11 @@ public class UserService {
         dto.setPassword(hashedPw);
 
         if(mapper.emailCheck(dto.getEmail()) != null) {
-            throw new RestApiException(UserErrorCode.DUPLICATION_EMAIL);
+            throw new RestApiException(AllErrorCode.DUPLICATION_EMAIL);
         }
 
         if(mapper.telCheck(dto.getTelNumber()) != null) {
-            throw new RestApiException(UserErrorCode.DUPLICATION_PHONE);
+            throw new RestApiException(AllErrorCode.DUPLICATION_PHONE);
         }
 
         mapper.signUp(dto);
@@ -58,7 +58,7 @@ public class UserService {
         UserEntity entity = mapper.userEntity(dto.getEmail());
 
         if(entity == null || !passwordEncoder.matches(dto.getPassword(), entity.getPassword())) {
-            throw new RestApiException(UserErrorCode.REGEXP_ID_PASSWORD);
+            throw new RestApiException(AllErrorCode.REGEXP_ID_PASSWORD);
         }
 
         MyPrincipal myPrincipal = MyPrincipal.builder()

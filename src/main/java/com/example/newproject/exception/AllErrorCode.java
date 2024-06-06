@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 @RequiredArgsConstructor
-public enum UserErrorCode implements ErrorCode{
+public enum AllErrorCode implements ErrorCode{
 
 
     NOT_EMAIL(HttpStatus.BAD_REQUEST,"아이디를 입력해주세요"),
@@ -22,7 +22,8 @@ public enum UserErrorCode implements ErrorCode{
     DUPLICATION_NICK_NAME(HttpStatus.BAD_REQUEST,"중복된 닉네임 입니다"),
     DUPLICATION_EMAIL(HttpStatus.BAD_REQUEST,"중복된 이메일 입니다"),
     DUPLICATION_PHONE(HttpStatus.BAD_REQUEST,"중복된 전화번호 입니다"),
-    REGEXP_ID_PASSWORD(HttpStatus.BAD_REQUEST,"잘못된 입력입니다.");
+    REGEXP_ID_PASSWORD(HttpStatus.BAD_REQUEST,"잘못된 입력입니다."),
+    PICS_OVER(HttpStatus.BAD_REQUEST,"사진이 5장 초과 되었습니다.");
 
 
     private final HttpStatus httpStatus;

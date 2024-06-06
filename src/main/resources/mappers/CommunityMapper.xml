@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.newproject.community.CommunityMapper">
+    <insert id="communityIns" useGeneratedKeys="true" keyProperty="iboard">
+        insert into t_community
+        set iuser = #{iuser}
+        , title = #{title}
+        , content = #{content}
+    </insert>
+
+    <insert id="communityInsPic">
+        insert into t_community_pic
+        (iboard, pic)
+        values
+        <foreach collection="pics" item="pic" separator=", ">
+            ( #{iboard}, #{pic} )
+        </foreach>
+    </insert>
+
+    <update id="communityUpd">
+        update t_community
+        set title = #{title}
+        , content = #{content}
+        where iuser = #{iuser}
+        and iboard = #{iboard}
+    </update>
+</mapper>
